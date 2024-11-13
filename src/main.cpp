@@ -2,18 +2,18 @@
 
 void setup() {
   // Serial1.begin(9600);
-  pinMode(19, OUTPUT);
+  pinMode(18, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(19, LOW);
+  digitalWrite(18, LOW);
 }
 
 void loop() {
   // Serial1.println("Hello, world");
-  digitalWrite(19, HIGH);
+  digitalWrite(18, HIGH);
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
+  delay(5000);
 
-  digitalWrite(19, LOW);
+  digitalWrite(18, LOW);
   digitalWrite(LED_BUILTIN, LOW);
-  delay(1000);
+  delay(5000);
 }
