@@ -1,19 +1,66 @@
 #include <Arduino.h>
+#include <Arduino_FreeRTOS.h>
+
+void TaskBlink(void *pvParameters) {
+  (void)pvParameters;
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  while (1) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    digitalWrite(LED_BUILTIN, LOW);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
+}
+
+void TaskDigitalWrite(void *pvParameters) {
+  (void)pvParameters;
+  pinMode(18, OUTPUT);
+
+  while (1) {
+    digitalWrite(18, HIGH);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    digitalWrite(18, LOW);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
+}
+
+void TaskAnalogRead(void *pvParameters) {
+  (void)pvParameters;
+
+  while (1) {
+    vTaskDelay(1);
+  }
+}
 
 void setup() {
-  // Serial1.begin(9600);
-  pinMode(18, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(18, LOW);
+  Serial.begin(9600);
+
+  xTaskCreate(
+      TaskBlink,
+      "Blink",
+      128,
+      NULL,
+      2,
+      NULL);
+
+  xTaskCreate(
+      TaskDigitalWrite,
+      "DigitalWrite",
+      128,
+      NULL,
+      3,
+      NULL);
+
+  xTaskCreate(
+      TaskAnalogRead,
+      "AnalogRead",
+      128,
+      NULL,
+      1,
+      NULL);
 }
 
 void loop() {
-  // Serial1.println("Hello, world");
-  digitalWrite(18, HIGH);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(5000);
-
-  digitalWrite(18, LOW);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(5000);
+  vTaskDelay(1);
 }
