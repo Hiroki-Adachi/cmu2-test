@@ -1,19 +1,21 @@
 #include <Arduino.h>
 
+constexpr uint8_t kGpio = 18;
+
 void setup() {
   // Serial1.begin(9600);
-  pinMode(18, OUTPUT);
+  pinMode(kGpio, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(18, LOW);
+  digitalWrite(kGpio, LOW);
 }
 
 void loop() {
   // Serial1.println("Hello, world");
-  digitalWrite(18, HIGH);
+  digitalWrite(kGpio, HIGH);
   digitalWrite(LED_BUILTIN, HIGH);
   delay(5000);
 
-  digitalWrite(18, LOW);
+  digitalWrite(kGpio, LOW);
   digitalWrite(LED_BUILTIN, LOW);
   delay(5000);
 }
