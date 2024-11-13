@@ -1,40 +1,40 @@
 #include <Arduino.h>
 #include <Arduino_FreeRTOS.h>
 
+constexpr uint8_t kGpioOutput = 18;
+
+constexpr uint16_t kLedBlinkCycleMsec = 1000;
+constexpr uint16_t kGpioOutputCycleMsec = 5000;
+
 void TaskBlink(void *pvParameters) {
   (void)pvParameters;
   pinMode(LED_BUILTIN, OUTPUT);
 
-  while (1) {
+  for (;;) {
     digitalWrite(LED_BUILTIN, HIGH);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(kLedBlinkCycleMsec / portTICK_PERIOD_MS);
     digitalWrite(LED_BUILTIN, LOW);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(kLedBlinkCycleMsec / portTICK_PERIOD_MS);
   }
 }
 
-void TaskDigitalWrite(void *pvParameters) {
+void TaskGpioOutput(void *pvParameters) {
   (void)pvParameters;
-  pinMode(18, OUTPUT);
+  pinMode(kGpioOutput, OUTPUT);
 
-  while (1) {
-    digitalWrite(18, HIGH);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    digitalWrite(18, LOW);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-  }
-}
-
-void TaskAnalogRead(void *pvParameters) {
-  (void)pvParameters;
-
-  while (1) {
-    vTaskDelay(1);
+  for (;;) {
+    digitalWrite(kGpioOutput, HIGH);
+    vTaskDelay(kGpioOutputCycleMsec / portTICK_PERIOD_MS);
+    digitalWrite(kGpioOutput, LOW);
+    vTaskDelay(kGpioOutputCycleMsec / portTICK_PERIOD_MS);
   }
 }
 
 void setup() {
   Serial.begin(9600);
+
+  while (!Serial) {
+  }
 
   xTaskCreate(
       TaskBlink,
@@ -45,16 +45,8 @@ void setup() {
       NULL);
 
   xTaskCreate(
-      TaskDigitalWrite,
-      "DigitalWrite",
-      128,
-      NULL,
-      3,
-      NULL);
-
-  xTaskCreate(
-      TaskAnalogRead,
-      "AnalogRead",
+      TaskGpioOutput,
+      "Gpio Output",
       128,
       NULL,
       1,
@@ -62,5 +54,4 @@ void setup() {
 }
 
 void loop() {
-  vTaskDelay(1);
 }
